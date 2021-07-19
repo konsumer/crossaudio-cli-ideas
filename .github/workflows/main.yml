@@ -1,0 +1,39 @@
+on: push
+jobs:
+  cli:
+    strategy:
+      matrix:
+        os: [windows, macos, ubuntu]
+        include:
+          - os: windows
+            build: |
+              npm ci
+              npx esbuild --bundle --target=node10 --outdir=./dist --platform=node --out-extension:.js=.cjs ./cli.js
+              npx caxa --directory . --command "{{caxa}}/node_modules/.bin/node" "{{caxa}}/cli.cjs" --output "Crossaudio--windows--${{ github.sha }}.exe"
+            artifact: Crossaudio--windows--${{ github.sha }}.exe
+          - os: macos
+            build: |
+              npm ci
+              npx esbuild --bundle --target=node10 --outdir=./dist --platform=node --out-extension:.js=.cjs ./cli.js
+              npx caxa --directory . --command "{{caxa}}/node_modules/.bin/node" "{{caxa}}/cli.cjs" --output "Crossaudio.app"
+              tar -czf "Crossaudio--macos--${{ github.sha }}.app.tgz" "Crossaudio.app"
+            artifact: Crossaudio--macos--${{ github.sha }}.app.tgz
+          - os: ubuntu
+            build: |
+              npm ci
+              npx esbuild --bundle --target=node10 --outdir=./dist --platform=node --out-extension:.js=.cjs ./cli.js
+              npx caxa --directory . --command "{{caxa}}/node_modules/.bin/node" "{{caxa}}/cli.cjs" --output "crossaudio"
+              tar -czf "crossaudio--linux--${{ github.sha }}.tgz" "crossaudio"
+            artifact: crossaudio--linux--${{ github.sha }}.tgz
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: |
+          ${{ matrix.build }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.artifact }}
