@@ -9,13 +9,13 @@ jobs:
             build: |
               npm ci
               npx esbuild --bundle --target=node10 --outdir=./dist --platform=node --out-extension:.js=.cjs ./cli.js
-              npx caxa --directory . --command "{{caxa}}/node_modules/.bin/node" "{{caxa}}/cli.cjs" --output "Crossaudio--windows--${{ github.sha }}.exe" -i dist
+              npx caxa --command "{{caxa}}/node_modules/.bin/node" "{{caxa}}/cli.cjs" --output "Crossaudio--windows--${{ github.sha }}.exe" -i dist
             artifact: Crossaudio--windows--${{ github.sha }}.exe
           - os: macos
             build: |
               npm ci
               npx esbuild --bundle --target=node10 --outdir=./dist --platform=node --out-extension:.js=.cjs ./cli.js
-              npx caxa --directory . --command "{{caxa}}/node_modules/.bin/node" "{{caxa}}/cli.cjs" --output "Crossaudio.app" -i dist
+              npx caxa --command "{{caxa}}/node_modules/.bin/node" "{{caxa}}/cli.cjs" --output "Crossaudio.app" -i dist
               tar -czf "Crossaudio--macos--${{ github.sha }}.app.tgz" "Crossaudio.app"
             artifact: Crossaudio--macos--${{ github.sha }}.app.tgz
           - os: ubuntu
@@ -24,7 +24,7 @@ jobs:
               sudo apt-get install -y libasound2-dev
               npm ci
               npx esbuild --bundle --target=node10 --outdir=./dist --platform=node --out-extension:.js=.cjs ./cli.js
-              npx caxa --directory . --command "{{caxa}}/node_modules/.bin/node" "{{caxa}}/cli.cjs" --output "crossaudio" -i dist
+              npx caxa --command "{{caxa}}/node_modules/.bin/node" "{{caxa}}/cli.cjs" --output "crossaudio" -i dist
               tar -czf "crossaudio--linux--${{ github.sha }}.tgz" "crossaudio"
             artifact: crossaudio--linux--${{ github.sha }}.tgz
     runs-on: ${{ matrix.os }}-latest
