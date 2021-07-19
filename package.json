@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "@crossaudio/core": "latest",
+    "easymidi": "latest",
+    "esm": "latest",
+    "nopt": "latest"
+  },
+  "type": "module",
+  "devDependencies": {
+    "esbuild": "latest",
+    "pkg": "latest"
+  },
+  "scripts": {
+    "build": "esbuild --bundle --target=node10 --outdir=./dist --platform=node --out-extension:.js=.cjs ./cli.js && pkg --name=crossaudio --public --out-path dist/ ./dist/cli.cjs"
+  }
+}
