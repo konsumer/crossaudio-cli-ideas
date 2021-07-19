@@ -20,8 +20,8 @@ jobs:
             artifact: Crossaudio--macos--${{ github.sha }}.app.tgz
           - os: ubuntu
             build: |
-              apt-get update
-              apt-get install libasound2-dev
+              sudo apt-get update
+              sudo apt-get install -y libasound2-dev
               npm ci
               npx esbuild --bundle --target=node10 --outdir=./dist --platform=node --out-extension:.js=.cjs ./cli.js
               npx caxa --directory . --command "{{caxa}}/node_modules/.bin/node" "{{caxa}}/cli.cjs" --output "crossaudio"
